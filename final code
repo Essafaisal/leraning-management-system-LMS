@@ -1,0 +1,696 @@
+#include<iostream>
+#include<string>
+#include<stdlib.h>
+using namespace std;
+
+enum department { computerScience, electricalEngineering, artificialIntelligence };
+enum educationLevel { graduate, underGraduate };
+
+class grade
+{
+public:
+	int marks;
+	string grade;
+
+	void getDetails(int _marks, string _grade)
+	{
+		marks = _marks;
+		grade = _grade;
+	}
+};
+class course
+{
+public:
+	string course;
+	string enrollment;
+	void getDetails(string _course, string _enrollment)
+	{
+		course = _course;
+		enrollment = _enrollment;
+	}
+};
+class person
+{
+public:
+	string name;
+	string occupation;
+	department dep;
+	educationLevel edu;
+	int age;
+	int regNo;
+	course courses[6] = { "MT101","CS101","PH101" };
+	grade grades[5];
+
+	void getDetails(string _name, string _occupation, int _age, int _regNo)
+	{
+		name = _name;
+		occupation = _occupation;
+		age = _age;
+		regNo = _regNo;
+	}
+	void studentDetails(department _dep, educationLevel _edu)
+	{
+		dep = _dep;
+		edu = _edu;
+	}
+};
+
+person* p1 = new person[10];
+void admin();
+void teacher();
+void student();
+int id;
+int numberOfPeople = 5;
+int numberOfCourses = 3;
+void displayPeople();
+void displayTeachers();
+void displayStudents();
+void displayCourses();
+void displayGrade(int id);
+int addOfMarks(int student);
+
+int main()
+{
+	p1[0].getDetails("hamza", "admin", 19, 2023224);
+	p1[0].courses[0].getDetails("MT101", "enrolled"); p1[0].courses[1].getDetails("CS101", "enrolled"); p1[0].courses[2].getDetails("PH101", "dropped");
+
+	p1[1].getDetails("aizen", "teacher", 500, 2023225);
+	p1[1].courses[0].getDetails("MT101", "allocated"); p1[1].courses[1].getDetails("CS101", "allocated"); p1[1].courses[2].getDetails("PH101", "dropped");
+
+	p1[2].getDetails("jojo", "student", 400, 2023226);
+	p1[2].courses[0].getDetails("MT101", "enrolled"); p1[2].courses[1].getDetails("CS101", "enrolled"); p1[2].courses[2].getDetails("PH101", "dropped");
+	p1[2].grades[0].getDetails(60, "D"); p1[2].grades[1].getDetails(90, "A"); p1[2].grades[2].getDetails(0, "0");
+	p1[2].studentDetails(electricalEngineering, underGraduate);
+
+	p1[3].getDetails("subaru", "student", 500000, 2023227);
+	p1[3].courses[0].getDetails("MT101", "enrolled"); p1[3].courses[1].getDetails("CS101", "enrolled"); p1[3].courses[2].getDetails("PH101", "dropped");
+	p1[3].grades[0].getDetails(70, "B"); p1[3].grades[1].getDetails(50, "D"); p1[3].grades[2].getDetails(0, "0");
+	p1[3].studentDetails(artificialIntelligence, underGraduate);
+
+	p1[4].getDetails("ichigo", "student", 19, 2023228);
+	p1[4].courses[0].getDetails("MT101", "enrolled"); p1[4].courses[1].getDetails("CS101", "enrolled"); p1[4].courses[2].getDetails("PH101", "dropped");
+	p1[4].grades[0].getDetails(90, "A"); p1[4].grades[1].getDetails(80, "B"); p1[4].grades[2].getDetails(0, "0");
+	p1[4].studentDetails(computerScience, underGraduate);
+
+	while (true)
+	{
+		system("cls");
+		cout << "\nWhich user are you: \n\n";
+		displayPeople();
+		cout << "user no: "; cin >> id; cout << endl;
+
+		if (p1[id].occupation == "admin")
+		{
+			admin();
+		}
+		if (p1[id].occupation == "teacher")
+		{
+			teacher();
+		}
+		if (p1[id].occupation == "student")
+		{
+			student();
+		}
+	}
+	delete[] p1;
+	return 0;
+}
+void admin()
+{
+	int adminOpt = 0;
+	while (adminOpt != 9)
+	{
+		cout << "\tWELCOME " << p1[id].name;
+		cout << "\n1. Add, remove, and update student details.\n";
+		cout << "2. Check records of all students.\n";
+		cout << "3. Enroll / un - enroll students from courses.\n";
+		cout << "4. Add, remove, and update teacher details.\n";
+		cout << "5. Check records of all teachers.\n";
+		cout << "6. Add, remove, and update course details.\n";
+		cout << "7. Check records of all courses.\n";
+		cout << "8. Allocate / de - allocate courses to / from teachers.\n";
+		cout << "9. Exit to main menu.\n";
+		cout << "Option: "; cin >> adminOpt;
+
+		switch (adminOpt)
+		{
+		case 1:
+		{
+			int studentDetails;
+			cout << "\n1. ADD\n2. REMOVE\n3. UPDATE\nOption: "; cin >> studentDetails;
+			switch (studentDetails)
+			{
+			case 1:
+				cout << "Name of student: "; cin >> p1[numberOfPeople].name;
+				p1[numberOfPeople].occupation = "student";
+				cout << "Age of student: "; cin >> p1[numberOfPeople].age;
+				cout << "Reg number of student: "; cin >> p1[numberOfPeople].regNo;
+				int depart;
+				cout << "Enter Department: \n1. Computer Science\n2. Electrical Engineering\n3. Artificial Intelligence\n";
+				cout << "Option: "; cin >> depart;
+				if (depart == 1)
+					p1[numberOfPeople].dep = computerScience;
+				else if (depart == 2)
+					p1[numberOfPeople].dep = electricalEngineering;
+				else
+					p1[numberOfPeople].dep = artificialIntelligence;
+
+				int education;
+				cout << "Enter Education Level: \n1. Graduate\n2. Undergraduate\n";
+				cout << "Option: "; cin >> education;
+				if (education == 1)
+					p1[numberOfPeople].edu = graduate;
+				else
+					p1[numberOfPeople].edu = underGraduate;
+
+				numberOfPeople++;
+				break;
+			case 2:
+				cout << "Which student do you want to remove?\n";
+				int removeStudent;
+				displayStudents();
+				cout << "Removal of student number: "; cin >> removeStudent;
+				if (p1[removeStudent].occupation == "student")
+				{
+					p1[removeStudent].getDetails("REMOVED", "student", 0, 0);
+				}
+				else
+				{
+					cout << "Invalid option.";
+				}
+
+				break;
+			case 3:
+				int updateDetails;
+				cout << "\nWhich student details do you want to update?\n";
+				displayPeople();
+				cout << "Student number: "; cin >> updateDetails;
+				cout << "OLD DETAILS: \n";
+				cout << "Name of student: " << p1[updateDetails].name;
+				cout << "Occupation: student";
+				cout << "\nAge of student: " << p1[updateDetails].age;
+				cout << "\nReg number of student: " << p1[updateDetails].regNo;
+
+				cout << "\nENTER NEW DETAILS: \n";
+				cout << "\nName of student: "; cin >> p1[updateDetails].name;
+				cout << "Age of student: "; cin >> p1[updateDetails].age;
+				cout << "Reg number of student: "; cin >> p1[updateDetails].regNo;
+
+				int updateDepart;
+				cout << "Enter Department: \n1. Computer Science\n2. Electrical Engineering\n3. Artificial Intelligence\n";
+				cout << "Option: "; cin >> updateDepart;
+				if (updateDepart == 1)
+					p1[updateDetails].dep = computerScience;
+				else if (updateDepart == 2)
+					p1[updateDetails].dep = electricalEngineering;
+				else
+					p1[updateDetails].dep = artificialIntelligence;
+
+				int updateEducation;
+				cout << "Enter Education Level: \n1. Graduate\n2. Undergraduate\n";
+				cout << "Option: "; cin >> updateEducation;
+				if (updateEducation == 1)
+					p1[updateDetails].edu = graduate;
+				else
+					p1[updateDetails].edu = underGraduate;
+
+				p1[updateDetails].getDetails(p1[updateDetails].name, "student", p1[updateDetails].age, p1[updateDetails].regNo);
+				break;
+			default:
+				cout << "Invalid option";
+				break;
+			}
+			break;
+		}
+		case 2:
+			cout << "\nSTUDENT RECORDS: ";
+			for (int i = 0; i < numberOfPeople; i++)
+			{
+				if (p1[i].occupation == "student")
+				{
+					cout << "\nName of student: " << p1[i].name;
+					cout << "\nAge of student: " << p1[i].age;
+					cout << "\nReg number of student: " << p1[i].regNo; cout << endl;
+				}
+			}
+			break;
+		case 3:
+			int studentEnrollment;
+			cout << "\nDo you want to: \n1. EN-ROLL\n2. UN-ENROLL\n";
+			cout << "Option: "; cin >> studentEnrollment;
+
+			switch (studentEnrollment)
+			{
+			case 1:
+				int enrollStudent;
+				cout << "Which student do you want to enroll into a course: \n";
+				displayStudents();
+				cout << "Option: "; cin >> enrollStudent;
+
+				int enrollCourse;
+				cout << "Which course do you want to enroll them in: \n";
+				for (int i = 0; i < numberOfCourses; i++)
+				{
+					cout << i << ". " << p1[enrollStudent].courses[i].course << endl;
+				}
+				cout << "Option: "; cin >> enrollCourse;
+
+				p1[enrollStudent].courses[enrollCourse].getDetails(p1[enrollStudent].courses[enrollCourse].course, "enrolled");
+				break;
+			case 2:
+				int dropStudent;
+				cout << "Which student do you want to un-enroll from a course: \n";
+				displayStudents();
+				cout << "Option: "; cin >> dropStudent;
+
+				int dropCourse;
+				cout << "Which course do you want to un-enroll them from: \n";
+				displayCourses();
+				cout << "Option: "; cin >> dropCourse;
+
+				p1[dropStudent].courses[dropCourse].getDetails(p1[dropStudent].courses[dropCourse].course, "dropped");
+				break;
+			default:
+			{
+				cout << "Invalid option.";
+				break;
+			}
+			}
+			break;
+		case 4:
+		{
+			int teacherDetails;
+			cout << "\n1. ADD\n2. REMOVE\n3. UPDATE\nOption: "; cin >> teacherDetails;
+			switch (teacherDetails)
+			{
+			case 1:
+				cout << "Name of teacher: "; cin >> p1[numberOfPeople].name;
+				p1[numberOfPeople].occupation = "teacher";
+				cout << "Age of teacher: "; cin >> p1[numberOfPeople].age;
+				cout << "Reg number of teacher: "; cin >> p1[numberOfPeople].regNo;
+				numberOfPeople++;
+				break;
+			case 2:
+				cout << "Which teacher do you want to remove?\n";
+				int removeTeacher;
+				for (int i = 0; i < numberOfPeople; i++)
+				{
+					if (p1[i].occupation == "teacher")
+					{
+						cout << i << ". " << p1[i].name + " [" + p1[i].occupation + "]" << endl;
+					}
+				}
+				cout << "Removal of teacher number: "; cin >> removeTeacher;
+				if (p1[removeTeacher].occupation == "teacher")
+				{
+					p1[removeTeacher].getDetails("REMOVED", "teacher", 0, 0);
+				}
+				else
+				{
+					cout << "Invalid option.";
+				}
+				break;
+			case 3:
+				int updateDetails;
+				cout << "\nWhich teacher details do you want to update?\n";
+				displayPeople();
+				cout << "Option: "; cin >> updateDetails;
+				cout << "OLD DETAILS: \n";
+				cout << "Name of teacher: " << p1[updateDetails].name;
+				cout << "Occupation: teacher";
+				cout << "\nAge of teacher: " << p1[updateDetails].age;
+				cout << "\nReg number of teacher: " << p1[updateDetails].regNo;
+
+				cout << "\nENTER NEW DETAILS: \n";
+				cout << "\nName of teacher: "; cin >> p1[updateDetails].name;
+				cout << "Age of teacher: "; cin >> p1[updateDetails].age;
+				cout << "Reg number of teacher: "; cin >> p1[updateDetails].regNo;
+				p1[updateDetails].getDetails(p1[updateDetails].name, "teacher", p1[updateDetails].age, p1[updateDetails].regNo);
+				break;
+			default:
+				cout << "Invalid option";
+				break;
+			}
+		}
+		case 5:
+		{
+			cout << "\nTEACHER RECORDS: ";
+			for (int i = 0; i < numberOfPeople; i++)
+			{
+				if (p1[i].occupation == "teacher")
+				{
+					cout << "\nName of teacher: " << p1[i].name;
+					cout << "\nAge of teacher: " << p1[i].age;
+					cout << "\nReg number of teacher: " << p1[i].regNo; cout << endl;
+				}
+			}
+			break;
+		}
+		case 6:
+		{
+			int courseDetails;
+			cout << "\n1. ADD\n2. REMOVE\n3. UPDATE\nOption: "; cin >> courseDetails;
+			switch (courseDetails)
+			{
+			case 1:
+				cout << "Name of course: "; cin >> p1[id].courses[numberOfCourses].course;
+				for (int i = 0; i < numberOfCourses; i++)
+				{
+					p1[i].courses[numberOfCourses].getDetails(p1[id].courses[numberOfCourses].course, "un-enrolled");
+				}
+				numberOfCourses++;
+				break;
+			case 2:
+				int removeCourse;
+				cout << "Which course do you want to remove?\n";
+				displayCourses(); cin >> removeCourse;
+				for (int i = 0; i < numberOfPeople; i++)
+				{
+					p1[i].courses[removeCourse].course = "REMOVED";
+				}
+				break;
+			case 3:
+				int updateDetails;
+				cout << "\nWhich course details do you want to update?\n";
+				displayCourses(); cin >> updateDetails;
+				cout << "OLD NAME: " << p1[id].courses[updateDetails].course << endl;
+				cout << "ENTER NEW NAME: "; cin >> p1[id].courses[updateDetails].course;
+				for (int i = 0; i < numberOfCourses; i++)
+				{
+					p1[i].courses[updateDetails].course = p1[id].courses[updateDetails].course;
+				}
+				break;
+			default:
+				cout << "Invalid option";
+				break;
+			}
+			break;
+		}
+		case 7:
+		{
+			cout << "\nCOURSE RECORDS: ";
+			for (int i = 0; i < numberOfCourses; i++)
+			{
+				cout << endl << p1[id].courses[i].course;
+			}
+			cout << endl;
+			break;
+		}
+		case 8:
+			int teacherAllocation;
+			cout << "\nDo you want to: \n1. ALLOCATE\n2. DE-ALLOCATE\n";
+			cout << "Option: "; cin >> teacherAllocation;
+
+			switch (teacherAllocation)
+			{
+			case 1:
+				int allocateTeacher;
+				cout << "Which teacher do you want to allocate a course to: \n";
+				displayTeachers();
+				cout << "Option: "; cin >> allocateTeacher;
+
+				int allocateCourse;
+				cout << "Which course do you want to allocate them to: \n";
+				for (int i = 0; i < numberOfCourses; i++)
+				{
+					cout << i << ". " << p1[allocateTeacher].courses[i].course << endl;
+				}
+				cout << "Option: "; cin >> allocateCourse;
+
+				p1[allocateTeacher].courses[allocateCourse].getDetails(p1[allocateTeacher].courses[allocateCourse].course, "allocated");
+				break;
+			case 2:
+				int dropTeacher;
+				cout << "Which teacher do you want to drop from a course: \n";
+				displayTeachers();
+				cout << "Option: "; cin >> dropTeacher;
+
+				int deAllocateCourse;
+				cout << "Which course do you want to de-allocate them from: \n";
+				displayCourses();
+				cout << "Option: "; cin >> deAllocateCourse;
+
+				p1[dropTeacher].courses[deAllocateCourse].getDetails(p1[dropTeacher].courses[deAllocateCourse].course, "dropped");
+				break;
+			default:
+			{
+				cout << "Invalid option.";
+				break;
+			}
+			}
+			break;
+		case 9:
+			break;
+		default:
+		{
+			cout << "Invalid option.";
+			break;
+		}
+		}
+	}
+}
+
+void teacher()
+{
+	int teacherOpt = 0;
+	while (teacherOpt != 7)
+	{
+		cout << "\tWELCOME " << p1[id].name;
+		cout << "\n1. Check personal details.\n";
+		cout << "2. View allocated courses.\n";
+		cout << "3. View enrolled students in each course.\n";
+		cout << "4. Assign marks and grades to students.\n";
+		cout << "5. View top student in class.\n";
+		cout << "6. View grade-wise division of students.\n";
+		cout << "7. Exit to main menu.\n";
+		cout << "Option: "; cin >> teacherOpt;
+
+		switch (teacherOpt)
+		{
+		case 1:
+			cout << "\nNAME: " << p1[id].name << endl;
+			cout << "AGE: " << p1[id].age << endl;
+			cout << "REG # " << p1[id].regNo << endl;
+			break;
+		case 2:
+		{
+			cout << "\nCOURSES: \n";
+			for (int i = 0; i < numberOfCourses; i++)
+			{
+				if (p1[id].courses[i].enrollment == "allocated")
+				{
+					cout << p1[id].courses[i].course << endl;
+				}
+			}
+			cout << endl;
+			break;
+		}
+		case 3:
+		{
+			for (int i = 0; i < numberOfCourses; i++)
+			{
+				cout << endl << p1[id].courses[i].course << " STUDENTS: \n";
+
+				for (int j = 0; j < numberOfPeople; j++)
+				{
+					if (p1[j].courses[i].enrollment == "enrolled")
+					{
+						cout << p1[j].name << endl;
+					}
+				}
+			}
+			break;
+		}
+		case 4:
+		{
+			int assignGrade;
+			cout << "Which student do you want to assign marks and grades to: \n";
+			displayStudents();
+			cout << "Student: "; cin >> assignGrade;
+			cout << "OLD MARKS AND GRADES: \n";
+			displayGrade(assignGrade);
+			cout << "ENTER NEW MARKS AND GRADES: \n";
+			for (int i = 0; i < numberOfCourses; i++)
+			{
+				if (p1[assignGrade].courses[i].enrollment == "enrolled")
+				{
+					cout << p1[assignGrade].courses[i].course << endl;
+					cout << "GRADE: "; cin >> p1[assignGrade].grades[i].grade;
+					cout << "MARKS: "; cin >> p1[assignGrade].grades[i].marks; cout << endl;
+				}
+			}
+			break;
+		}
+		case 5:
+		{
+			int topStudent = 0;
+			for (int i = 1; i < numberOfPeople; i++)
+			{
+				if (p1[i].occupation == "student")
+				{
+					if (addOfMarks(i) > addOfMarks(topStudent))
+					{
+						topStudent = i;
+					}
+				}
+			}
+			cout << "TOP STUDENT IS: " << p1[topStudent].name << endl << endl;
+			break;
+		}
+		case 6:
+		{
+			int topStudent = 2;
+			int bottomStudent = 2;
+			for (int i = 0; i < numberOfPeople; i++)
+			{
+				if (p1[i].occupation == "student")
+				{
+					if (addOfMarks(i) > addOfMarks(topStudent))
+					{
+						topStudent = i;
+					}
+					if (addOfMarks(i) < addOfMarks(bottomStudent))
+					{
+						bottomStudent = i;
+					}
+				}
+			}
+			cout << "TOP STUDENT IS: " << p1[topStudent].name << endl;
+			displayGrade(topStudent);
+			cout << "BOTTOM STUDENT IS: " << p1[bottomStudent].name << endl;
+			displayGrade(bottomStudent);
+			break;
+		}
+		case 7:
+			break;
+		default:
+		{
+			cout << "Invalid option.";
+			break;
+		}
+		}
+	}
+}
+
+void student()
+{
+	int studentOpt = 0;
+	while (studentOpt != 6)
+	{
+		cout << "\tWELCOME " << p1[id].name;
+		cout << "\n1. Check personal details.\n";
+		cout << "2. Enroll in available courses.\n";
+		cout << "3. View final grades.\n";
+		cout << "4. View list of teachers.\n";
+		cout << "5. View enrolled, dropped, and completed courses.\n";
+		cout << "6. Exit to main menu.\n";
+		cout << "Option: "; cin >> studentOpt;
+
+		switch (studentOpt)
+		{
+		case 1:
+		{
+			cout << "\nNAME: " << p1[id].name << endl;
+			cout << "AGE: " << p1[id].age << endl;
+			cout << "REG # " << p1[id].regNo << endl;
+			break;
+		}
+		case 2:
+		{
+			int enrollCourse;
+			cout << "The available courses are: \n";
+			for (int i = 0; i < numberOfCourses; i++)
+			{
+				if (p1[id].courses[i].enrollment == "un-enrolled" || p1[id].courses[i].enrollment == "dropped")
+				{
+					cout << i << ". " << p1[id].courses[i].course << endl;
+				}
+			}
+			cout << "Option: "; cin >> enrollCourse;
+
+			p1[id].courses[enrollCourse].getDetails(p1[id].courses[enrollCourse].course, "enrolled");
+			break;
+		}
+		case 3:
+		{
+			cout << "\nFINAL GRADES: \n";
+			displayGrade(id);
+			break;
+		}
+		case 4:
+		{
+			cout << "\nLIST OF TEACHERS: \n";
+			displayTeachers();
+			break;
+		}
+		case 5:
+		{
+			for (int i = 0; i < numberOfCourses; i++)
+			{
+				cout << "\nCOURSE " << i + 1 << ": " << p1[id].courses[i].course << " [" << p1[id].courses[i].enrollment << "]";
+			}
+			cout << endl;
+			break;
+		}
+		case 6:
+			break;
+		default:
+			cout << "Invalid option.";
+		}
+	}
+}
+void displayPeople()
+{
+	for (int i = 0; i < numberOfPeople; i++)
+	{
+		cout << i << ". " << p1[i].name + " [" + p1[i].occupation + "]" << endl;
+	}
+	cout << endl;
+}
+void displayTeachers()
+{
+	for (int i = 0; i < numberOfPeople; i++)
+	{
+		if (p1[i].occupation == "teacher")
+		{
+			cout << i << ". " << p1[i].name + " [" + p1[i].occupation + "]" << endl;
+		}
+	}
+	cout << endl;
+}
+void displayStudents()
+{
+	for (int i = 0; i < numberOfPeople; i++)
+	{
+		if (p1[i].occupation == "student")
+		{
+			cout << i << ". " << p1[i].name + " [" + p1[i].occupation + "]" << endl;
+		}
+	}
+	cout << endl;
+}
+void displayCourses()
+{
+	for (int i = 0; i < numberOfCourses; i++)
+	{
+		cout << i << ". " << p1[id].courses[i].course << endl;
+	}
+}
+void displayGrade(int id)
+{
+	for (int i = 0; i < numberOfCourses; i++)
+	{
+		cout << p1[id].courses[i].course << endl;
+		cout << "GRADE: " << p1[id].grades[i].grade << endl;
+		cout << "MARKS: " << p1[id].grades[i].marks << endl << endl;
+	}
+}
+int addOfMarks(int student)
+{
+	int addOfMarks = 0;
+	for (int i = 0; i < numberOfCourses; i++)
+	{
+		addOfMarks += p1[student].grades[i].marks;
+	}
+	return addOfMarks;
+}
